@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>田间土壤水热盐测定方法与实践</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+        
+        html {
+            font-size: clamp(14px, 1.2vw, 22px);
+        }
+
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            overflow: hidden;
+        }
+        .slide {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 4rem;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+            z-index: 10;
+        }
+        .slide-content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide-content.left-align {
+            justify-content: flex-start;
+        }
+        ul {
+            list-style-position: outside;
+            padding-left: 2rem;
+        }
+        ul ul {
+             list-style-type: circle;
+             margin-top: 0.5rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.5rem;
+        }
+        th, td {
+            border: 1px solid #d1d5db;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f3f4f6;
+        }
+        .nav-button {
+            position: fixed;
+            z-index: 20;
+            bottom: 2rem;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            border-radius: 9999px;
+            width: 3rem;
+            height: 3rem;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .nav-button:hover {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        #prev {
+            left: 2rem;
+        }
+        #next {
+            right: 2rem;
+        }
+        #counter {
+            position: fixed;
+            z-index: 20;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 1rem;
+            font-size: 0.9rem;
+        }
+        .image-placeholder {
+            margin-top: 2rem;
+            color: #9ca3af;
+            border: 2px dashed #d1d5db;
+            padding: 2rem;
+            text-align: center;
+            border-radius: 0.5rem;
+        }
+        h1, h2, h3 {
+             color: #111827;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Slide 1 -->
+    <div class="slide active">
+        <div class="slide-content items-center text-center">
+            <h1 class="text-6xl font-bold mb-6">田间土壤水热盐测定方法与实践</h1>
+            <p class="text-4xl text-gray-700 mb-12">原理、技术与应用</p>
+            <div class="text-2xl text-gray-600">
+                <p>付永威</p>
+                <p class="mt-2">土地科学与技术学院 土壤与水系</p>
+                <p class="mt-2">2025.9.30</p>
+            </div>
+        </div>
+        <!-- <img src="Picture1.png" alt="土壤剖面传感器安装" class="absolute bottom-16 left-16 rounded-lg shadow-lg" style="width: 250px;"> -->
+    </div>
+
+    <!-- Slide 2 -->
+    <div class="slide">
+        <div class="slide-content left-align !flex-row !items-start gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-8">为什么研究土壤水热盐？</h2>
+                <ul class="list-disc space-y-5 text-2xl">
+                    <li><strong class="text-blue-700">核心地位:</strong> 土壤是地球关键带的核心，水热盐是重要的物理过程。</li>
+                    <li><strong class="text-blue-700">对植物生长的影响:</strong>
+                        <ul class="space-y-2 text-xl mt-2">
+                            <li><strong>水:</strong> 光合作用原料、营养物质溶剂和载体。</li>
+                            <li><strong>热:</strong> 影响种子萌发、根系生长和微生物活动。</li>
+                            <li><strong>盐:</strong> 影响渗透势，高盐胁迫抑制生长。</li>
+                        </ul>
+                    </li>
+                    <li><strong class="text-blue-700">对生态系统的影响:</strong>
+                        <ul class="space-y-2 text-xl mt-2">
+                            <li><strong>水平衡:</strong> 决定降水在“产流-入渗-蒸发”中的分配。</li>
+                            <li><strong>能量平衡:</strong> 土壤热通量是地表能量平衡的关键分量。</li>
+                            <li><strong>物质循环:</strong> 影响碳氮循环、温室气体排放。</li>
+                        </ul>
+                    </li>
+                    <li><strong class="text-blue-700">在生产实践中的应用:</strong> 精准灌溉、盐碱地改良、旱情监测等。</li>
+                </ul>
+            </div>
+            <div class="w-2/5 h-full flex flex-col gap-6 justify-center items-center self-center">
+                <img src="Picture2.png" alt="健康生长的绿色植物" class="object-cover rounded-lg shadow-xl" style="width: 8cm;">
+                <img src="Picture3.svg" alt="干旱盐碱地里的枯萎植物" class="object-cover rounded-lg shadow-xl" style="width: 8cm;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3 -->
+    <div class="slide">
+        <div class="slide-content left-align flex flex-row gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-8">核心概念 - 土壤水</h2>
+                <div class="space-y-8 text-2xl">
+                    <div>
+                        <h3 class="font-bold text-3xl mb-4 text-green-700">土壤含水量 (Soil Water Content)</h3>
+                        <ul class="list-disc space-y-2">
+                            <li><strong>质量含水量 (θ<sub>g</sub>):</strong> 水质量 / 干土质量。 (单位: g/g)</li>
+                            <li><strong>体积含水量 (θ<sub>v</sub>):</strong> 水体积 / 土壤总体积。 (单位: cm³/cm³)</li>
+                            <li><strong>换算:</strong> θ<sub>v</sub> = θ<sub>g</sub> × (ρ<sub>b</sub> / ρ<sub>w</sub>)，其中 ρ<sub>b</sub> 为土壤容重，ρ<sub>w</sub> 为水的密度。</li>
+                            <li><strong>土壤容重 (ρ<sub>b</sub>):</strong> ρ<sub>b</sub> = 干土质量 / 土壤总体积。 (单位: g/cm³)</li>
+                            <li><strong>土壤孔隙度 (f):</strong> f = 1 - (ρ<sub>b</sub> / ρ<sub>s</sub>)，其中 ρ<sub>s</sub> 为土壤颗粒密度。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-3xl mb-4 text-green-700">土壤水势 (Soil Water Potential, ψ)</h3>
+                        <ul class="list-disc space-y-2">
+                            <li>衡量土壤水能量状态的指标，决定水流方向。(单位: Pa, bar, cm水头)</li>
+                            <li><strong>组成:</strong> 基质势 (ψ<sub>m</sub>) + 渗透势 (ψ<sub>o</sub>) + 重力势 (ψ<sub>g</sub>) + 压力势 (ψ<sub>p</sub>)。</li>
+                            <li>田间土壤水主要受 <strong class="text-red-600">基质势</strong> 和 <strong class="text-red-600">重力势</strong> 控制。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="w-2/5 grid grid-cols-2 grid-rows-2 gap-2 items-center justify-center">
+                <img src="Picture4.png" alt="土壤含水量示意图" class="object-cover rounded-lg shadow-xl" style="width: 7cm;">
+                <img src="Picture5.png" alt="土壤水势示意图" class="object-cover rounded-lg shadow-xl" style="width: 7cm;">
+                <img src="Picture6.png" alt="土壤水分相关图1" class="object-cover rounded-lg shadow-xl" style="width: 7cm;">
+                <img src="Picture7.png" alt="土壤水分相关图2" class="object-cover rounded-lg shadow-xl" style="width: 7cm;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4 -->
+    <div class="slide">
+        <div class="slide-content left-align flex flex-row gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-8">核心概念 - 土壤热</h2>
+                <div class="space-y-6 text-2xl">
+                    <div>
+                        <h3 class="font-bold text-3xl mb-3 text-red-700">土壤温度 (Soil Temperature)</h3>
+                        <ul class="list-disc">
+                            <li>土壤热状况最直观的指标，影响土壤物理、化学和生物过程的速率。</li>
+                            <li>呈周期性变化（日/年），随深度增加，振幅减小，相位延迟。</li>
+                        </ul>
+                        <div class="mt-6 p-4 bg-yellow-50 rounded-lg">
+                            <span class="font-bold text-2xl text-blue-700 block mb-4">不同深度土壤温度周期变化公式：</span>
+                            <div class="mb-4">
+                                <span class="font-bold text-lg text-gray-800">地表温度（z=0）：</span>
+                                <div class="text-2xl mt-1">$$T(0, t) = T_0 + A_0 \sin(\omega t)$$</div>
+                            </div>
+                            <div>
+                                <span class="font-bold text-lg text-gray-800">z深度温度：</span>
+                                <div class="text-2xl mt-1">$$T(z, t) = T_0 + A_0 e^{-z/D} \sin(\omega t - z/D)$$</div>
+                            </div>
+                            <span class="text-gray-700 text-base block mt-2">其中：T(z, t)为z深度t时刻温度，T_0为年/日均温，A_0为地表温度振幅，D为阻尼深度，ω为角频率。</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="w-2/5 flex flex-col gap-6 items-center justify-center">
+                <img src="soil_temperature_profile_animation.gif" alt="GIF 1 描述" class="rounded-lg shadow-lg w-full max-w-xs">
+                <img src="soil_temperature_depth_comparison.gif" alt="GIF 2 描述" class="rounded-lg shadow-lg w-full max-w-xs">
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5 -->
+    <div class="slide">
+        <div class="slide-content left-align flex flex-row gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-8">核心概念 - 土壤热</h2>
+                <div class="space-y-6 text-2xl">
+                    <div>
+                        <h3 class="font-bold text-3xl mb-3 text-red-700">土壤热通量 (Soil Heat Flux, G)</h3>
+                        <ul class="list-disc">
+                            <li>单位时间、单位面积上通过土壤的热量。</li>
+                            <li>地表能量平衡方程关键分量: R<sub>n</sub> = G + H + LE</li>
+                            <li class="ml-6 text-xl text-gray-700 mt-2">其中：R<sub>n</sub>为净辐射，G为土壤热通量，H为显热通量，LE为潜热通量。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-3xl mb-3 text-red-700">土壤热特性</h3>
+                        <ul class="list-disc">
+                            <li><strong>热容量:</strong> 单位体积土壤温度升高1°C所需吸收的热量。 (单位: J/(m³·°C))</li>
+                            <li><strong>热导率:</strong> 单位时间内，在单位温度梯度下，单位截面积土壤能传递的热量。 (单位: W/(m·°C))</li>
+                            <li><strong>热扩散率:</strong> 土壤温度变化扩散速度的参数，等于热导率与热容量的比值。 (单位: m²/s)</li>
+                            <li class="mt-2"><strong>关键影响因素:</strong> <strong class="text-blue-600">土壤含水量</strong>、容重、有机质、质地。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="w-2/5 flex flex-col gap-6 items-center justify-center">
+                <img src="Picture8.png" alt="土壤含水量示意图" class="object-cover rounded-lg shadow-xl" style="width: 12cm;">
+                <img src="soil_thermal_properties.png" alt="土壤热特性示意图" class="object-cover rounded-lg shadow-xl" style="width: 12cm;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6 -->
+    <div class="slide">
+        <div class="slide-content left-align flex flex-row gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-8">核心概念 - 土壤盐</h2>
+                <div class="space-y-8 text-2xl">
+                    <div>
+                        <h3 class="font-bold text-3xl mb-4 text-purple-700">土壤盐分 (Soil Salinity)</h3>
+                        <ul class="list-disc space-y-2">
+                            <li><strong>定义:</strong> 土壤中所有可溶性盐类的总称。</li>
+                            <li><strong>衡量指标:</strong> 总含盐量 (%) 或 土壤溶液电导率 (EC)。</li>
+                            <li><strong>电导率 (EC):</strong> 最常用，单位: dS/m, mS/cm。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-3xl mb-4 text-purple-700">重要EC指标区分</h3>
+                        <ul class="list-disc space-y-2">
+                            <li><strong>EC<sub>e</sub>:</strong> 饱和土浆浸提液电导率 <span class="text-yellow-600 font-bold">(实验室标准方法)</span>。</li>
+                            <li><strong>EC<sub>1:5</sub>:</strong> 1:5土水比浸提液电导率 (快速测定)。</li>
+                            <li><strong>EC<sub>w</sub>:</strong> 土壤孔隙水电导率 (作物根系真实环境)。</li>
+                            <li><strong>EC<sub>a</sub> (或 EC<sub>b</sub>):</strong> 土壤表观/体积电导率 <span class="text-blue-600 font-bold">(田间传感器直接测量)</span>。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="w-2/5 flex flex-col gap-6 items-center justify-center">
+                <img src="Picture9.png" alt="土壤盐分示意图1" class="object-cover rounded-lg shadow-xl" style="width: 12cm;">
+                <img src="Picture10.png" alt="土壤盐分示意图2" class="object-cover rounded-lg shadow-xl" style="width: 12cm;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-8">测量方法分类</h2>
+            <div class="text-3xl space-y-12">
+                <div class="p-6 bg-blue-50 rounded-lg">
+                    <strong class="text-blue-800">按原理:</strong> 直接法 vs. 间接法
+                </div>
+                <div class="p-6 bg-green-50 rounded-lg">
+                    <strong class="text-green-800">按地点:</strong> 实验室法 vs. 田间原位法 (In-situ)
+                </div>
+                <div class="p-6 bg-yellow-50 rounded-lg">
+                    <strong class="text-yellow-800">按自动化程度:</strong> 人工测量 vs. 自动监测
+                </div>
+                <div class="mt-12 text-center p-6 bg-red-100 rounded-lg border-2 border-red-500">
+                    <h3 class="text-4xl font-bold text-red-700">本课程重点: 田间原位 (In-situ) 监测方法</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-6">第二部分：土壤水分测定方法</h2>
+            <h3 class="text-3xl font-bold mb-8 text-blue-700">直接法 - 烘干法 (Gravimetric Method)</h3>
+            <div class="grid grid-cols-3 gap-8 text-2xl">
+                <div class="col-span-2">
+                    <p class="mb-4 text-2xl"><strong>原理:</strong> 通过105°C烘箱烘干去除水分，计算失重量与干土重的比值。</p>
+                    <p class="mb-4 text-2xl"><strong>设备:</strong> 土钻、环刀、铝盒、天平 (0.01g)、烘箱。</p>
+                    <div class="flex flex-row gap-8 items-start">
+                        <div class="w-1/2">
+                            <div class="font-bold text-green-700 mb-2">优点:</div>
+                            <ul class="list-disc pl-5 space-y-3">
+                                <li>标准方法 (Standard Method)，最准确。</li>
+                                <li>仪器简单，成本低。</li>
+                                <li>是校准其他间接方法的基准。</li>
+                            </ul>
+                        </div>
+                        <div class="w-1/2">
+                            <div class="font-bold text-red-700 mb-2">缺点:</div>
+                            <ul class="list-disc pl-5 space-y-3">
+                                <li>破坏性取样，无法定点重复测量。</li>
+                                <li>耗时耗力 (>12小时)。</li>
+                                <li>无法获得实时、连续数据。</li>
+                                <li>空间代表性有限。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <img src="Picture11.png" alt="烘干法示意图" class="object-cover rounded-lg shadow-xl w-full">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-6">间接法 - 宇宙射线中子传感器 (Cosmic Ray Neutron Sensor)</h2>
+            <h3 class="text-3xl font-bold mb-8 text-blue-700">原理与应用</h3>
+            <div class="grid grid-cols-3 gap-8 text-2xl">
+                <div class="col-span-2">
+                    <p class="mb-4 text-2xl"><strong>原理:</strong> 放射源发射快中子，与水中的氢核碰撞后能量衰减为慢中子，探测器记录慢中子数，其与体积含水量正相关。</p>
+                    <div class="flex flex-row gap-8 items-start">
+                        <div class="w-1/2">
+                            <div class="font-bold text-green-700 mb-2">优点:</div>
+                            <ul class="list-disc pl-5 space-y-3">
+                                <li>测量范围大 (水平范围可达 200-300 m 半径，有效深度约 15-30 cm)。</li>
+                                <li>结果稳定，不受盐分和温度影响。</li>
+                                <li>可重复测量剖面含水量。</li>
+                            </ul>
+                        </div>
+                        <div class="w-1/2">
+                            <div class="font-bold text-red-700 mb-2">缺点:</div>
+                            <ul class="list-disc pl-5 space-y-3">
+                                <li><strong class="bg-yellow-200">放射性源</strong>: 需严格安全许可和操作。</li>
+                                <li>价格昂贵，设备笨重。</li>
+                                <li>近地表 (0-20cm) 测量误差大。</li>
+                                <li>对有机质敏感。</li>
+                                <li>正逐渐被更安全的技术取代。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <img src="Picture12.png" alt="中子水分仪示意图" class="object-cover rounded-lg shadow-xl" style="width: 10cm;">
+                    <img src="Picture13.png" alt="中子水分仪工作原理图" class="object-cover rounded-lg shadow-xl" style="width: 10cm;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-6">间接法 - 时域反射法 (Time Domain Reflectometry, TDR)</h2>
+            <p class="mb-4 text-2xl p-4 bg-blue-50 rounded-lg"><strong class="text-blue-800">核心原理:</strong> 土壤的表观介电常数 (K<sub>a</sub>) 主要由液态水 (ε≈80) 决定。通过测量电磁波在土壤探针中的传播时间，反算K<sub>a</sub>，进而得到含水量θ<sub>v</sub>。</p>
+            <div class="flex flex-row gap-8 mt-4">
+            <div class="w-3/5 text-2xl">
+                <h3 class="text-3xl font-bold mb-2">测量过程:</h3>
+                <ol class="list-decimal pl-6 space-y-2">
+                    <li>TDR仪器产生一个高频电磁脉冲。</li>
+                    <li>脉冲沿同轴电缆传输到插入土壤的金属探针 (波导杆)。</li>
+                    <li>脉冲在波导杆末端反射回仪器。</li>
+                    <li>仪器精确测量脉冲的往返传播时间 (Δt)。</li>
+                    <li>脉冲传播速度 (v) 取决于K<sub>a</sub>:  v = c / √K<sub>a</sub> (c为光速)。</li>
+                    <li>通过 K<sub>a</sub> = (c✖️Δt / 2L)² 计算出K<sub>a</sub>，进而换算为θ<sub>v</sub>。</li>
+                </ol>
+            </div>
+            <div class="w-2/5 flex items-center justify-center">
+                <img src="tdr_waveform_realistic.gif" alt="TDR电磁波在探针中的传播与反射过程动画" class="w-full rounded-lg shadow-lg">
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Slide 11 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-8">TDR的优缺点</h2>
+            <div class="flex flex-row gap-8 text-2xl">
+                <div class="w-1/2 space-y-8">
+                    <div>
+                        <p class="font-bold text-green-700 text-3xl mb-4">优点:</p>
+                        <ul class="list-disc pl-5 space-y-3">
+                            <li>高精度、高准确性。</li>
+                            <li>响应速度快 (秒级)，可连续监测。</li>
+                            <li class="p-2 bg-green-100 rounded"><strong>对盐分不敏感 (测量的是时间)。</strong></li>
+                            <li>校准稳定性好，通用性校准方程适用性广。</li>
+                            <li>可同时测量土壤体电导率 (EC<sub>a</sub>)。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-bold text-red-700 text-3xl mb-4">缺点:</p>
+                        <ul class="list-disc pl-5 space-y-3">
+                            <li><strong>价格昂贵。</strong></li>
+                            <li>波形分析复杂 (现代仪器已内置算法)。</li>
+                            <li>在黏粒或有机质含量高的土壤中，需要特定校准。</li>
+                            <li>探针安装要求高，必须与土壤紧密接触。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="w-1/2 flex gap-8">
+                    <img src="Picture14.jpg" alt="TDR示意图1" class="w-1/2 rounded-lg shadow-xl" style="height: 15cm;">
+                    <img src="Picture15.jpg" alt="TDR示意图2" class="w-1/2 rounded-lg shadow-xl" style="height: 15cm;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-8">间接法 - 频域法 (Frequency Domain Reflectometry, FDR) / 电容法</h2>
+            <p class="mb-6 text-2xl p-4 bg-blue-50 rounded-lg"><strong class="text-blue-800">核心原理:</strong> 同样基于含水量与介电常数的关系。但其构成一个振荡电路，通过测量电路<strong class="text-red-600">振荡频率</strong>随土壤介电常数的变化来反推含水量。</p>
+            <div class="flex flex-row gap-8 text-2xl mt-8">
+                <div class="w-2/3">
+                    <div class="mb-8">
+                        <p class="font-bold text-green-700 text-3xl mb-4">优点:</p>
+                        <ul class="list-disc pl-5 space-y-3">
+                            <li><strong>成本远低于TDR。</strong></li>
+                            <li>功耗低，技术简单，易于集成。</li>
+                            <li>探头形状多样，安装灵活。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-bold text-red-700 text-3xl mb-4">缺点:</p>
+                        <ul class="list-disc pl-5 space-y-3">
+                            <li class="p-2 bg-red-100 rounded"><strong>对土壤盐分、温度和质地更敏感。</strong></li>
+                            <li>测量体积相对TDR较小。</li>
+                            <li>通常需要针对特定土壤进行校准才能达到高精度。</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="w-1/3 flex items-center justify-center">
+                    <img src="Picture16.jpg" alt="FDR传感器示意图" class="object-cover rounded-lg shadow-xl w-full">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-8">方法对比总结 - 土壤水</h2>
+            <table class="text-lg">
+                <thead>
+                    <tr>
+                        <th class="w-1/5">方法</th>
+                        <th class="w-1/4">原理</th>
+                        <th class="w-1/4">优点</th>
+                        <th class="w-1/4">缺点</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="font-bold">烘干法</td>
+                        <td>直接测量</td>
+                        <td class="text-green-700">金标准、准确</td>
+                        <td class="text-red-700">破坏性、耗时、非实时</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">宇宙射线中子传感器</td>
+                        <td>中子热化</td>
+                        <td class="text-green-700">测量范围大、稳定</td>
+                        <td class="text-red-700">放射性、昂贵、表层不准</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">TDR</td>
+                        <td>介电常数(时间)</td>
+                        <td class="text-green-700">精度高、快速、盐分不敏感</td>
+                        <td class="text-red-700">昂贵、安装要求高</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">FDR/电容</td>
+                        <td>介电常数(频率)</td>
+                        <td class="text-green-700">成本低、低功耗</td>
+                        <td class="text-red-700">易受盐分/温度影响、需校准</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="text-center mt-8 text-2xl font-bold text-gray-700 p-4 bg-yellow-100 rounded-lg">短暂休息 (5分钟)</div>
+        </div>
+    </div>
+    
+    <!-- Slide 14 -->
+    <div class="slide">
+        <div class="slide-content left-align flex flex-row gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-6">第三部分：土壤热参数测定</h2>
+                <h3 class="text-3xl font-bold mb-8 text-red-700">土壤温度测量</h3>
+                 <div class="space-y-6 text-2xl">
+                     <div>
+                        <h4 class="font-bold text-2xl mb-2">电子传感器:</h4>
+                        <ul class="list-disc pl-5 text-xl space-y-1">
+                            <li><strong>热电偶 (Thermocouple):</strong> 价格低，精度一般。</li>
+                            <li><strong>热敏电阻 (Thermistor):</strong> 灵敏度高、响应快，但非线性。</li>
+                            <li><strong>电阻温度检测器 (Resistance Temperature Detector, RTD):</strong> 精度高、稳定性好，但价格较高。</li>
+                        </ul>
+                     </div>
+                     <div>
+                        <h4 class="font-bold text-2xl mb-2">红外成像法</h4>
+                        <ul class="list-disc pl-5 text-xl space-y-1">
+                            <li><strong>红外成像 (Infrared Thermography):</strong> 非接触式、快速覆盖，受环境影响、只能测量表面温度、成本高。</li>
+                            <li><strong>分布式光纤温度传感 (Fiber Optic Distributed Temperature Sensing, DTS):</strong> 大范围和深度、精度高、耐腐蚀，安装复杂、成本高。</li>
+                        </ul>
+                     </div>
+                     <div>
+                        <h4 class="font-bold text-2xl mb-2 text-blue-600">安装要点:</h4>
+                         <ul class="list-disc pl-5 text-xl">
+                            <li><strong class="text-gray-700">方向:</strong> 水平插入，减少热传导误差。</li>
+                            <li><strong class="text-gray-700">接触:</strong> 确保传感器与土壤良好接触。</li>
+                        </ul>
+                     </div>
+                </div>
+            </div>
+            <div class="flex flex-col gap-4 justify-center items-center">
+                <img src="Picture17.jpg" alt="中子水分仪示意图" class="object-cover rounded-lg shadow-xl" style="width: 13cm;">
+                <img src="Picture18.jpg" alt="中子水分仪工作原理图" class="object-cover rounded-lg shadow-xl" style="width: 13cm;">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 15 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-8 text-red-700">土壤热通量测量 (Soil Heat Flux Plate)</h2>
+             <div class="space-y-6 text-2xl">
+                 <div>
+                    <h4 class="font-bold text-2xl mb-2">原理:</h4>
+                    <ul class="list-disc pl-5">
+                        <li>基于傅里叶热传导定律: G = -λ (dT/dz)。</li>
+                        <li>热通量板是一种已知热导率的扁平物体，通过测量其上下表面的微小温差 (ΔT)，计算出通过板的热通量G<sub>plate</sub>。</li>
+                    </ul>
+                 </div>
+                 <div>
+                    <h4 class="font-bold text-2xl mb-2">结构:</h4>
+                    <ul class="list-disc pl-5">
+                        <li>扁平的热电堆 (多个串联的热电偶) 封装在保护材料中。</li>
+                        <li>输出与温差成正比的毫伏电压信号。</li>
+                    </ul>
+                 </div>
+            </div>
+            <div class="mt-8 flex justify-center">
+                <img src="Picture19.jpg" alt="热通量板结构及安装示意图" class="object-cover rounded-lg shadow-xl" style="width: 50%;">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 16 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-8 text-red-700">热通量板的安装与数据校正</h2>
+            <div class="grid grid-cols-2 gap-8 text-2xl">
+                <div>
+                    <p class="font-bold text-blue-700 text-3xl mb-4">安装要点:</p>
+                    <ul class="list-disc pl-5 space-y-3">
+                        <li>通常埋设在地下2-10 cm深度。</li>
+                        <li>水平放置，与土壤紧密接触。</li>
+                        <li>多个板取平均值以克服空间异质性。</li>
+                    </ul>
+                </div>
+                <div class="p-4 border-l-4 border-yellow-400 bg-yellow-50">
+                    <p class="font-bold text-yellow-800 text-3xl mb-4">数据校正 (重要!):</p>
+                    <ul class="list-disc pl-5 space-y-3">
+                        <li>热通量板忽略了其<strong class="text-red-600">上方</strong>土壤层的热量储存变化 (ΔS)。</li>
+                        <li><strong class="text-lg">地表真实热通量 G<sub>surface</sub> = G<sub>plate</sub> + ΔS</strong></li>
+                        <li>ΔS 需要通过测量板上方的土壤温度和含水量的变化来计算。</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 flex flex-row gap-4 justify-center">
+                <img src="Picture20.jpg" alt="热通量板安装示意图1" class="object-cover rounded-lg shadow-xl" style="width: 25%;">
+                <img src="Picture21.jpg" alt="热通量板安装示意图2" class="object-cover rounded-lg shadow-xl" style="width: 25%;">
+                <img src="Picture22.jpg" alt="热通量板安装示意图3" class="object-cover rounded-lg shadow-xl" style="width: 25%;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 17 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-6">第四部分：土壤盐分测定</h2>
+            <h3 class="text-3xl font-bold mb-8 text-purple-700">实验室标准法</h3>
+            <div class="space-y-8 text-2xl">
+                <div class="p-4 bg-yellow-50 rounded-lg">
+                    <h4 class="font-bold text-2xl mb-2 text-yellow-700">饱和土浆浸提液法 (Saturated Paste Extract)</h4>
+                    <ul class="list-disc pl-5 text-xl space-y-1">
+                        <li><strong>步骤:</strong> 风干 → 制备饱和土浆 → 平衡静置 → 真空抽滤/离心 → 测浸提液电导率(EC<sub>e</sub>)。</li>
+                        <li><strong>意义:</strong> <strong class="text-red-600">国际公认的土壤盐渍化分级标准</strong>，校准田间方法的基准。</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-2xl mb-2">土水比浸提液法 (1:1, 1:5)</h4>
+                    <ul class="list-disc pl-5 text-xl">
+                        <li>步骤简单快速，但结果受土壤质地影响大。</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 flex flex-row gap-4 justify-center items-center"></div>
+                <img src="Picture23.jpg" alt="土壤盐分示意图" class="object-cover rounded-lg shadow-xl mx-auto" style="width: 60%;">
+        </div>
+    </div>
+
+    <!-- Slide 18 -->
+    <div class="slide">
+        <div class="slide-content left-align flex flex-row gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-8 text-purple-700">田间原位法 - 温纳法（四极等距法）</h2>
+                 <div class="space-y-6 text-2xl">
+                     <div>
+                        <h4 class="font-bold text-2xl mb-2">原理:</h4>
+                        <ul class="list-disc pl-5">
+                            <li>外侧两电极施加交流电流(I)，内侧两电极测量电势差(ΔV)。</li>
+                            <li>根据欧姆定律和电极构型计算出土壤体电导率 EC<sub>a</sub>。</li>
+                        </ul>
+                     </div>
+                     <div>
+                        <h4 class="font-bold text-2xl mb-2">应用:</h4>
+                        <ul class="list-disc pl-5">
+                            <li>可快速进行大面积盐分普查。</li>
+                            <li>测量深度与电极间距有关。</li>
+                        </ul>
+                     </div>
+                </div>
+            </div>
+            <div class="w-2/5 flex items-center justify-center">
+                <img src="Picture24.jpg" alt="四电极法原理示意图" class="object-cover rounded-lg shadow-xl" style="width: 12cm;">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 19 -->
+    <div class="slide">
+        <div class="slide-content left-align flex flex-row gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-8 text-purple-700">田间原位法 - 电磁感应法 (EMI)</h2>
+                <div class="space-y-6 text-2xl">
+                    <div>
+                        <h4 class="font-bold text-2xl mb-2">代表仪器: Geonics EM38</h4>
+                        <h4 class="font-bold text-2xl mb-2 mt-4">原理:</h4>
+                        <p class="text-xl">发射线圈(T<sub>x</sub>)产生一次磁场 → 在导电土壤中感生出与EC<sub>a</sub>成正比的涡电流 → 涡电流产生二次磁场 → 接收线圈(R<sub>x</sub>)探测二次磁场，计算出EC<sub>a</sub>。</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-green-700 text-3xl mb-4">优点:</p>
+                        <ul class="list-disc pl-5 space-y-3">
+                            <li><strong>非接触式测量，快速高效。</strong></li>
+                            <li>可测量不同深度 (改变仪器方向)。</li>
+                            <li>非常适合大尺度土壤盐分制图。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <p class="font-bold text-red-700 text-3xl mb-4">缺点:</p>
+                        <ul class="list-disc pl-5 space-y-3">
+                            <li>测量精度受盐分、温度质地影响。</li>
+                            <li>需要针对不同土壤类型进行校准。</li>
+                            <li>价格较高，设备笨重。</li>
+                            <li>深度分辨率有限。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="w-2/5 flex items-center justify-center">
+                <img src="Picture25.jpg" alt="EM38手持或车载进行田间作业的图片" class="object-cover rounded-lg shadow-xl" style="width: 14cm;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 20 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-8 text-purple-700">利用水分传感器同步测盐</h2>
+            <div class="space-y-8 text-2xl">
+                <div>
+                    <h4 class="font-bold text-2xl mb-2">原理:</h4>
+                    <p class="text-xl">TDR和FDR传感器在测量含水量的同时，也能测量土壤的电导特性，即<strong class="text-blue-600">土壤表观电导率 (EC<sub>a</sub>)</strong>。</p>
+                </div>
+                <div class="p-4 border-l-4 border-yellow-400 bg-yellow-50">
+                    <h4 class="font-bold text-2xl mb-2 text-yellow-800">换算模型:</h4>
+                    <p class="text-xl">EC<sub>a</sub>受含水量(θ<sub>v</sub>)和孔隙水电导率(EC<sub>w</sub>)共同影响。需要利用特定模型 (如Hilhorst模型) 将EC<sub>a</sub>、θ<sub>v</sub>和温度数据，转换为对农业更有意义的<strong class="text-red-600">孔隙水电导率EC<sub>w</sub></strong>。</p>
+                </div>
+                <div class="mt-8 p-4 bg-blue-50 rounded-lg">
+                    <h4 class="font-bold text-2xl mb-4 text-blue-800">Hilhorst模型表达式:</h4>
+                    <div class="text-xl">
+                        <p class="mb-4">Hilhorst模型用于估算孔隙水电导率：</p>
+                        <div class="text-2xl mb-4">$$\sigma _{p}=\frac{\varepsilon _{p}\sigma _{b}}{\varepsilon _{b}-\varepsilon _{\sigma b=0}}$$</div>
+                        <p class="mb-4">其中：σ<sub>p</sub>：孔隙水电导率 (S/m); ε<sub>p</sub>：水的介电常数; σ<sub>b</sub>：土壤体积电导率 (S/m); ε<sub>b</sub>：土壤体积介电常数; ε<sub>σb=0</sub>：当电导率为0时的土壤体积介电常数</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 21 -->
+    <div class="slide">
+        <div class="slide-content left-align !flex-row !items-start gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-6">第五部分：综合监测与展望</h2>
+                <h3 class="text-3xl font-bold mb-8 text-green-700">集成传感器与监测网络</h3>
+                <ul class="list-disc space-y-5 text-2xl">
+                    <li><strong class="text-blue-700">多参数集成传感器:</strong> 在同一点同步获取水分、温度、电导率，研究耦合效应。</li>
+                    <li><strong class="text-blue-700">自动监测站 (物联网, IoT):</strong> 实现长期、无人值守、高频率的连续监测。</li>
+                    <li><strong class="text-blue-700">站点布设与网络设计:</strong>
+                        <ul class="space-y-2 text-xl mt-2">
+                            <li><strong>代表性:</strong> 覆盖主要土壤类型、地形和利用方式。</li>
+                            <li><strong>空间变异性:</strong> 捕捉整体空间格局。</li>
+                            <li><strong>分层监测:</strong> 监测剖面动态。</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="flex flex-col gap-4 justify-center items-center">
+                <img src="Picture1.png" alt="中子水分仪示意图" class="object-cover rounded-lg shadow-xl" style="width: 10cm;">
+                <img src="Picture26.png" alt="中子水分仪工作原理图" class="object-cover rounded-lg shadow-xl" style="width: 15cm;">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 22 -->
+    <div class="slide">
+        <div class="slide-content left-align !flex-row !items-center gap-8">
+            <div class="w-3/5 self-start">
+                <h2 class="text-4xl font-bold mb-8 text-green-700">数据处理与质量控制</h2>
+                <ul class="list-disc space-y-6 text-2xl">
+                     <li><strong class="text-gray-800">数据采集与存储:</strong> 设置合理频率，建立数据库。</li>
+                     <li><strong class="text-gray-800">质量控制 (QC):</strong>
+                        <ul class="space-y-2 text-xl mt-2">
+                            <li>剔除异常值 (超出物理范围、传感器故障)。</li>
+                            <li>数据插补与平滑。</li>
+                            <li class="p-2 bg-yellow-100 rounded">定期进行田间原位校准（如用烘干法校准水分传感器）。</li>
+                        </ul>
+                     </li>
+                     <li><strong class="text-gray-800">数据分析与可视化:</strong> 时间序列分析、剖面动态图、空间插值制图等。</li>
+                </ul>
+            </div>
+            <div class="flex flex-col gap-4 justify-center items-center">
+                <img src="Picture27.png" alt="中子水分仪示意图" class="object-cover rounded-lg shadow-xl" style="width: 15cm;">
+                <img src="Picture28.png" alt="中子水分仪工作原理图" class="object-cover rounded-lg shadow-xl" style="width: 15cm;">
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 23 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-4xl font-bold mb-8 text-green-700">总结与未来趋势</h2>
+            <div class="grid grid-cols-2 gap-8 text-2xl">
+                <div>
+                    <p class="font-bold text-blue-700 text-3xl mb-4">总结:</p>
+                    <ul class="list-disc pl-5 space-y-3">
+                        <li>方法的选择取决于研究目的、精度、预算和时空尺度。</li>
+                        <li>理解物理原理是正确使用和解读数据的关键。</li>
+                        <li>交叉验证和校准是保证数据质量的核心环节。</li>
+                    </ul>
+                </div>
+                <div>
+                    <p class="font-bold text-red-700 text-3xl mb-4">未来趋势:</p>
+                    <ul class="list-disc pl-5 space-y-3">
+                        <li>低成本、智能传感器。</li>
+                        <li>物联网 (IoT) 与无线传感器网络 (WSN)。</li>
+                        <li>多源数据融合 (地面-无人机-卫星)。</li>
+                        <li>模型-数据融合 (监测+模拟)。</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="flex justify-center mt-8">
+                <img src="Picture29.png" alt="数据处理与可视化示例" class="object-cover rounded-lg shadow-xl" style="height: 35%;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 24 -->
+    <div class="slide">
+        <div class="slide-content left-align !flex-row !items-start gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-6">实验设备介绍</h2>
+                <h3 class="text-3xl font-bold mb-8 text-green-700">TEROS 12 多参数土壤传感器</h3>
+                <div class="space-y-6 text-2xl">
+                    <div>
+                        <h4 class="font-bold text-2xl mb-2 text-blue-600">技术参数:</h4>
+                        <ul class="list-disc pl-5 text-xl space-y-1">
+                            <li><strong>体积含水量:</strong> 精度 ±0.03 m³/m³，分辨率 0.001 m³/m³</li>
+                            <li><strong>温度:</strong> 精度 ±0.5°C，分辨率 0.1°C，范围 -40~60°C</li>
+                            <li><strong>电导率:</strong> 精度 ±5%，范围 0~20 dS/m</li>
+                            <li><strong>供电:</strong> 3-15V DC，功耗 <3mA</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-2xl mb-2 text-blue-600">技术优势:</h4>
+                        <ul class="list-disc pl-5 text-xl space-y-1">
+                            <li>基于70MHz频域反射技术，测量稳定可靠</li>
+                            <li>三参数一体化设计，安装简便</li>
+                            <li>抗盐碱、抗腐蚀，适合长期野外监测</li>
+                            <li>响应速度快，可实现高频连续监测</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="w-2/5 flex flex-col gap-6 items-center justify-center self-center">
+                <div class="text-center">
+                    <img src="Picture30.png" alt="TEROS 12传感器" class="object-cover rounded-lg shadow-xl mb-2" style="width: 12cm;">
+                    <p class="text-lg text-gray-600">TEROS 12 传感器</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 25 -->
+    <div class="slide">
+        <div class="slide-content left-align !flex-row !items-start gap-8">
+            <div class="w-3/5">
+                <h2 class="text-4xl font-bold mb-6">数据采集系统</h2>
+                <h3 class="text-3xl font-bold mb-8 text-green-700">ZL6 数据采集器</h3>
+                <div class="space-y-6 text-2xl">
+                    <div>
+                        <h4 class="font-bold text-2xl mb-2 text-blue-600">系统特点:</h4>
+                        <ul class="list-disc pl-5 text-xl space-y-1">
+                            <li><strong>多通道:</strong> 可连接多达6个TEROS传感器</li>
+                            <li><strong>数据存储:</strong> 内置2GB存储，可存储数百万数据点</li>
+                            <li><strong>通信方式:</strong> WiFi、蓝牙、USB多种数据传输</li>
+                            <li><strong>供电系统:</strong> 内置锂电池+太阳能板供电</li>
+                            <li><strong>防护等级:</strong> IP68防水防尘，适应恶劣环境</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-2xl mb-2 text-blue-600">监测布设方案:</h4>
+                        <ul class="list-disc pl-5 text-xl space-y-1">
+                            <li>垂直剖面: 5cm, 15cm, 25cm三个深度</li>
+                            <li>采样频率: 每15分钟记录一次数据</li>
+                            <li>监测周期: 连续监测14天以上</li>
+                            <li>数据类型: 温度、含水量、电导率时间序列</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="w-2/5 flex flex-col gap-6 items-center justify-center self-center">
+                <div class="text-center">
+                    <img src="Picture31.png" alt="ZL6数据采集器" class="object-cover rounded-lg shadow-xl mb-2" style="width: 10cm;">
+                    <p class="text-lg text-gray-600">ZL6 数据采集器</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 26 -->
+    <div class="slide">
+        <div class="slide-content left-align">
+            <h2 class="text-5xl font-bold mb-8 text-blue-700">实验报告要求</h2>
+            <div class="space-y-8 text-2xl">
+                <div>
+                    <h3 class="font-bold text-3xl mb-4 text-gray-800">田间获取的土壤温度动态变化数据：</h3>
+                    <ul class="list-disc pl-8 space-y-2">
+                        <li>(1) 不同层次的土壤温度日变化图 (挑出一天较为典型的日变化作图)；</li>
+                        <li>(2) 不同层次的土壤温度周变化图；</li>
+                        <li>(3) 定量化描述不同层次的土壤温度变化 (振幅、最高/低温及其出现时间)。</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-3xl mb-4 text-gray-800">田间获取的土壤含水量动态变化数据：</h3>
+                    <ul class="list-disc pl-8 space-y-2">
+                        <li>(1) 不同层次的土壤含水量变化图；</li>
+                        <li>(2) 结合降雨数据，定量化描述不同层次的土壤含水量变化 (最高/低含水量、趋势及原因)。</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-bold text-3xl mb-4 text-gray-800">根据案例给出的土壤水热电数据：</h3>
+                    <ul class="list-disc pl-8 space-y-2">
+                        <li>(1) 做出测定期间内电导率随含水量变化的关系图，并分析物理规律及机子制；</li>
+                        <li>(2) 讨论测定期间内土壤温度随含水量变化的关系图，并分析物理规律及机子制。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 27 -->
+    <div class="slide">
+        <div class="slide-content items-center text-center">
+            <h1 class="text-6xl font-bold mb-8">Q & A</h1>
+            <p class="text-4xl text-gray-700 mb-12">提问与交流</p>
+            <p class="text-5xl font-bold text-blue-600 mt-8">感谢聆听！</p>
+            <div class="text-2xl text-gray-600 mt-12">
+                <p>yfu@cau.edu.cn</p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Navigation -->
+    <button id="prev" class="nav-button">&#10094;</button>
+    <button id="next" class="nav-button">&#10095;</button>
+    <div id="counter"></div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const prevButton = document.getElementById('prev');
+        const nextButton = document.getElementById('next');
+        const counter = document.getElementById('counter');
+        let currentSlide = 0;
+
+        function showSlide(n) {
+            slides.forEach((slide, index) => {
+                slide.classList.remove('active');
+            });
+            slides[n].classList.add('active');
+            counter.textContent = `${n + 1} / ${slides.length}`;
+            
+            // Hide/show buttons
+            prevButton.style.display = n === 0 ? 'none' : 'block';
+            nextButton.style.display = n === slides.length - 1 ? 'none' : 'block';
+        }
+
+        function nextSlide() {
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                showSlide(currentSlide);
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                showSlide(currentSlide);
+            }
+        }
+
+        prevButton.addEventListener('click', prevSlide);
+        nextButton.addEventListener('click', nextSlide);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // Initial setup
+        showSlide(currentSlide);
+    </script>
+
+</body>
+</html>
+
